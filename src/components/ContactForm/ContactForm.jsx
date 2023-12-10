@@ -1,30 +1,41 @@
-import { MainForm, Btn, StyledLabel, StyledField, Error } from './ContactForm.styled';
+import {
+  MainForm,
+  Btn,
+  StyledLabel,
+  StyledField,
+  Error,
+} from './ContactForm.styled';
 import * as Yup from 'yup';
-import { Formik,  } from 'formik';
+import { Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectContacts } from 'redux/selectors';
-import { addPhone } from 'redux/contactListReducer'; 
-
+import { addContact } from 'redux/operations';
 const PhonebookSchema = Yup.object().shape({
-  name: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required'),
-  number: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required'),
+  name: Yup.string()
+    .min(2, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required'),
+  number: Yup.string()
+    .min(2, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required'),
 });
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
-  
- const handleAddPhone = (values, actions) => {
-    if (contacts.some((contact) => contact.name === values.name)) {
+
+  const handleAddPhone = (values, actions) => {
+    if (contacts.some(contact => contact.name === values.name)) {
       alert('Contact with the same name already exists!');
     } else {
-      dispatch(addPhone(values));
+      dispatch(addContact(values));
     }
 
     actions.resetForm();
   };
 
-   return (
+  return (
     <Formik
       initialValues={{
         name: '',
@@ -33,7 +44,7 @@ export const ContactForm = () => {
       validationSchema={PhonebookSchema}
       onSubmit={(values, actions) => {
         actions.resetForm();
-        handleAddPhone(values); 
+        handleAddPhone(values);
       }}
     >
       <MainForm>
